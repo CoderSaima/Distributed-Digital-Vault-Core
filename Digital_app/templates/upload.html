@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Digital Vault Security Portal</title>
+</head>
+<body style="font-family: Arial, sans-serif; margin: 50px; background-color: #fafafa;">
+    <div style="max-width: 700px; margin: auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
+        <h2>Distributed Digital Vault Testing Portal</h2>
+        <hr>
+        
+        <!-- ✅ FIXED FORM ACTION TARGET -->
+        <form method="POST" enctype="multipart/form-data" action="{% url 'vault_upload' %}">
+            {% csrf_token %}
+
+            <h3>Step 1: Choose Your Identity (RBAC Security Test)</h3>
+            <select name="email" style="padding: 10px; font-size: 16px; margin-bottom: 20px; width: 100%;">
+                <option value="sana_testing@example.com">sana_testing@example.com (Authorized Manager Role)</option>
+                <option value="guest_user@example.com">guest_user@example.com (Unauthorized Guest Role)</option>
+            </select>
+
+            <h3>Step 2: Select a File to Encrypt into PostgreSQL</h3>
+            <input type="file" name="files" style="font-size: 16px; margin-bottom: 20px; display: block;" required><br>
+
+            <button type="submit" style="padding: 12px 20px; font-size: 16px; background-color: #0056b3; color: white; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold;">
+                Execute Secure Upload Pipeline
+            </button>
+        </form>
+
+        {% if secure_download_url %}
+        <div style="margin-top: 20px; padding: 20px; background-color: #e6f4ea; border: 1px solid #b7e1cd; border-radius: 4px;">
+            <h3 style="color: #137333; margin-top: 0;">File Successfully Vaulted!</h3>
+            <p style="font-size: 15px; color: #202124;">Your file has been mathematically scrambled and stored. You can retrieve it securely using the temporary link below (Expires in 10 minutes):</p>
+            <a href="{{ secure_download_url }}" style="display: block; text-align: center; text-decoration: none; padding: 12px 20px; font-size: 16px; background-color: #1e7e34; color: white; border: none; border-radius: 4px; font-weight: bold;">
+                Download Decrypted File Now
+            </a>
+        </div>
+        {% endif %}
+
+        {% if error_message %}
+        <div style="margin-top: 20px; padding: 20px; background-color: #fce8e6; border: 1px solid #fad2cf; border-radius: 4px; color: #c5221f;">
+            <h3>Error Occurred</h3>
+            <p>{{ error_message }}</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
